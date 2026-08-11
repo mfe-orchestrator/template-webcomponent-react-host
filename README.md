@@ -62,12 +62,20 @@ microfrontend:**
 ```ts
 import { configure } from '@mfe-orchestrator-hub/client'
 
+const environment = import.meta.env.VITE_MFE_ENVIRONMENT?.trim()
+
 configure({
   backendUrl: import.meta.env.VITE_MFE_BACKEND_URL,
   projectId: import.meta.env.VITE_MFE_PROJECT_ID,
-  environment: import.meta.env.VITE_MFE_ENVIRONMENT
+  ...(environment ? { environment } : {})
 })
 ```
+
+`backendUrl` and `projectId` are required, `environment` is not. When `VITE_MFE_ENVIRONMENT` is
+unset or empty the key is left out of `configure()` altogether — the host never passes an empty
+string — and the backend resolves the environment from the domain the page is served from, out of
+the domains declared for each environment in the console. The spread is there for exactly that: it
+is the difference between "no environment" and "an environment whose name is the empty string".
 
 **Then each microfrontend is loaded by slug:**
 
@@ -85,11 +93,11 @@ pinned to a version, and injects it as a script. The SDK also exposes `manifest(
 
 Copy `.env.example` to `.env` and fill it in. Vite injects them at build time.
 
-| variable | what it is |
-| --- | --- |
-| `VITE_MFE_BACKEND_URL` | orchestrator backend, including the `/api` suffix |
-| `VITE_MFE_PROJECT_ID` | id of your project in the orchestrator |
-| `VITE_MFE_ENVIRONMENT` | environment slug, ex. `DEV` |
+| variable | required | what it is |
+| --- | --- | --- |
+| `VITE_MFE_BACKEND_URL` | yes | orchestrator backend, including the `/api` suffix |
+| `VITE_MFE_PROJECT_ID` | yes | id of your project in the orchestrator |
+| `VITE_MFE_ENVIRONMENT` | no | environment slug, ex. `DEV`. Omit it to let the backend resolve the environment from the domain |
 
 `.env` is gitignored. Never commit real values.
 
