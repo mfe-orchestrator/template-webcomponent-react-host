@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { remoteUrl } from '@mfe-orchestrator-hub/client'
+import { remoteUrl } from '@mfe-orchestrator/client'
 
 export interface MicrofrontendLoaderProps extends React.PropsWithChildren {
   /** Slug of the microfrontend in the orchestrator. */
