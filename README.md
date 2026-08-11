@@ -9,7 +9,7 @@ marketplace as `webcomponent-host-react`. Web Component + React 19, wired as a *
 - [pnpm](https://pnpm.io) 10 or newer
 
 > [!IMPORTANT]
-> `pnpm install` currently fails with a 404 on `@mfe-orchestrator/client`: the client SDK is not
+> `pnpm install` currently fails with a 404 on `@mfe-orchestrator-hub/client`: the client SDK is not
 > published to a registry yet. That single dependency is the only thing missing — everything
 > else in this template installs and builds. Until it is published, either wait for it or point
 > the dependency at a local checkout of the SDK.
@@ -55,7 +55,7 @@ canaries exist.
 microfrontend:**
 
 ```ts
-import { configure } from '@mfe-orchestrator/client'
+import { configure } from '@mfe-orchestrator-hub/client'
 
 configure({
   backendUrl: import.meta.env.VITE_MFE_BACKEND_URL,

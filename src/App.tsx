@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { globalVariables, identities, manifest } from '@mfe-orchestrator/client'
+import { globalVariables, identities, manifest } from '@mfe-orchestrator-hub/client'
 import MicrofrontendLoader from './MicrofrontendLoader'
-import type { MicrofrontendEntry } from '@mfe-orchestrator/client'
+import type { MicrofrontendEntry } from '@mfe-orchestrator-hub/client'
 
 const App: React.FC = () => {
   const [microfrontends, setMicrofrontends] = useState<MicrofrontendEntry[]>([])
