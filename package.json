@@ -11,7 +11,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@mfe-orchestrator-hub/client": "^0.1.1",
+    "@mfe-orchestrator-hub/client": "^0.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

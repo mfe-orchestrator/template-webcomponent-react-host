@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@mfe-orchestrator-hub/client':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.2.1
+        version: 0.2.1
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -36,8 +36,8 @@ importers:
 
 packages:
 
-  '@mfe-orchestrator-hub/client@0.1.1':
-    resolution: {integrity: sha512-X4vLS/UnZPeIrTiLP5tzEH31QnBPOk3ct9vo/o7QeoKVJQYsRuIKyOWNodJg7nhgsfoBKRjnftE1pbACoqChNg==}
+  '@mfe-orchestrator-hub/client@0.2.1':
+    resolution: {integrity: sha512-rMNk0hgkYf5VffdWGkyM5b0SXPGNmy8vQj55+oF2aqhXAuxE3nNPioy1oUTq8JZEHZvCGwMiH2/vk5WuzumMWg==}
     engines: {node: '>=20.0.0'}
 
   '@oxc-project/types@0.144.0':
@@ -343,7 +343,7 @@ packages:
 
 snapshots:
 
-  '@mfe-orchestrator-hub/client@0.1.1': {}
+  '@mfe-orchestrator-hub/client@0.2.1': {}
 
   '@oxc-project/types@0.144.0': {}
 
