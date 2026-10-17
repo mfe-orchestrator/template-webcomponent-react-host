@@ -6,7 +6,7 @@ marketplace as `webcomponent-host-react`. Web Component + React 19, wired as a *
 ## Requirements
 
 - Node.js 20 or newer
-- [pnpm](https://pnpm.io) 10 or newer
+- [pnpm](https://pnpm.io) 12 (pinned in `packageManager`; `corepack enable` picks it up)
 
 > [!NOTE]
 > The client SDK is published as `@mfe-orchestrator-hub/client` and this template depends on it at
