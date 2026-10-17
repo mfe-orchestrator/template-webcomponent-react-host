@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
+import * as ReactDOMClient from 'react-dom/client'
+import * as ReactJSXRuntime from 'react/jsx-runtime'
 import { remoteUrl } from '@mfe-orchestrator-hub/client'
 
 export interface MicrofrontendLoaderProps extends React.PropsWithChildren {
   /** Slug of the microfrontend in the orchestrator. */
   slug: string
   /**
-   * Web component builds that externalise React expect it on the window. Leave
-   * this on unless your microfrontend bundles its own copy.
+   * Web component builds that externalise React expect it on the window, as
+   * window.React, window.ReactDOM (react-dom plus react-dom/client, where React 19
+   * keeps createRoot) and window.ReactJSXRuntime. Leave this on unless your
+   * microfrontend bundles its own copy.
    */
   exposeReactGlobals?: boolean
   /**
@@ -42,8 +46,10 @@ export const MicrofrontendLoader: React.FC<MicrofrontendLoaderProps> = ({
     let cancelled = false
 
     if (exposeReactGlobals) {
-      ;(window as unknown as Record<string, unknown>)['React'] = React
-      ;(window as unknown as Record<string, unknown>)['ReactDOM'] = ReactDOM
+      const globals = window as unknown as Record<string, unknown>
+      globals['React'] = React
+      globals['ReactDOM'] = { ...ReactDOM, ...ReactDOMClient }
+      globals['ReactJSXRuntime'] = ReactJSXRuntime
     }
 
     setLoading(true)
