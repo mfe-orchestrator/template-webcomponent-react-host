@@ -20,7 +20,6 @@
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
         "allowJs": false,
-        "esModuleInterop": false,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true
     },

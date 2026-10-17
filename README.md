@@ -137,7 +137,7 @@ docker run -p 8080:80 my-host
 ## Notes
 
 - There is no Module Federation here, and no `remoteEntry.js`. A web component microfrontend is a plain script that registers a custom element, so the host only needs the URL the orchestrator resolved. `MicrofrontendLoader` asks `remoteUrl(slug)` for it, injects a `<script>`, and renders the element once it has loaded.
-- Builds that externalise React expect `window.React` / `window.ReactDOM`. `MicrofrontendLoader` sets both before injecting the script; turn that off with `exposeReactGlobals={false}` if your microfrontend bundles its own copy.
+- Builds that externalise React expect `window.React`, `window.ReactDOM` (`react-dom` together with `react-dom/client`, where React 19 keeps `createRoot`) and `window.ReactJSXRuntime`. `MicrofrontendLoader` sets all three before injecting the script; turn that off with `exposeReactGlobals={false}` if your microfrontend bundles its own copy.
 - Pass `scriptType="module"` when the microfrontend uploads its ES build. Leave it unset for the UMD build, which loads as a classic script.
 
 ## License
