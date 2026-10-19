@@ -4,14 +4,14 @@ import * as ReactDOMClient from 'react-dom/client'
 import * as ReactJSXRuntime from 'react/jsx-runtime'
 import { remoteUrl } from '@mfe-orchestrator-hub/client'
 
-export interface MicrofrontendLoaderProps extends React.PropsWithChildren {
-  /** Slug of the microfrontend in the orchestrator. */
+export interface FrontendLoaderProps extends React.PropsWithChildren {
+  /** Slug of the frontend in the orchestrator. */
   slug: string
   /**
    * Web component builds that externalise React expect it on the window, as
    * window.React, window.ReactDOM (react-dom plus react-dom/client, where React 19
    * keeps createRoot) and window.ReactJSXRuntime. Leave this on unless your
-   * microfrontend bundles its own copy.
+   * frontend bundles its own copy.
    */
   exposeReactGlobals?: boolean
   /**
@@ -24,13 +24,13 @@ export interface MicrofrontendLoaderProps extends React.PropsWithChildren {
 }
 
 /**
- * Loads a web component microfrontend and renders whatever custom element it
+ * Loads a web component frontend and renders whatever custom element it
  * registers.
  *
  * The URL comes from remoteUrl(slug) and is used verbatim: the host does not
  * choose the version it gets and must not rebuild or trim that URL.
  */
-export const MicrofrontendLoader: React.FC<MicrofrontendLoaderProps> = ({
+export const FrontendLoader: React.FC<FrontendLoaderProps> = ({
   slug,
   children,
   exposeReactGlobals = true,
@@ -86,4 +86,4 @@ export const MicrofrontendLoader: React.FC<MicrofrontendLoaderProps> = ({
   return <>{children}</>
 }
 
-export default MicrofrontendLoader
+export default FrontendLoader

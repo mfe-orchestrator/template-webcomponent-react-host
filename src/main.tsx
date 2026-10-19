@@ -1,5 +1,5 @@
 // configure() must run at the very top of the entry point, synchronously, before
-// anything loads a microfrontend. It is idempotent.
+// anything loads a frontend. It is idempotent.
 import { configure } from '@mfe-orchestrator-hub/client'
 
 // The environment is optional. When VITE_MFE_ENVIRONMENT is unset, or set to an

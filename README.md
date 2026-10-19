@@ -32,8 +32,8 @@ pnpm build      # production build into dist/
 ├── nginx/no-cache.conf
 ├── index.html
 ├── src/
-│   ├── App.tsx                              # shell, loads the example microfrontend
-│   ├── MicrofrontendLoader.tsx              # resolves a slug and injects the script
+│   ├── App.tsx                              # shell, loads the example frontend
+│   ├── FrontendLoader.tsx              # resolves a slug and injects the script
 │   ├── custom-elements.d.ts                 # JSX types for the custom elements
 │   ├── index.css
 │   ├── main.tsx                             # configure() lives here
@@ -53,7 +53,7 @@ decided by the backend. Nothing in this repo parses a version, builds a URL by h
 canaries exist.
 
 **`configure()` runs at the very top of `src/main.tsx`, synchronously, before anything loads a
-microfrontend:**
+frontend:**
 
 ```ts
 import { configure } from '@mfe-orchestrator-hub/client'
@@ -73,15 +73,15 @@ string — and the backend resolves the environment from the domain the page is 
 the domains declared for each environment in the console. The spread is there for exactly that: it
 is the difference between "no environment" and "an environment whose name is the empty string".
 
-**Then each microfrontend is loaded by slug:**
+**Then each frontend is loaded by slug:**
 
 ```tsx
-<MicrofrontendLoader slug="your-microfrontend-slug">
+<FrontendLoader slug="your-frontend-slug">
   <your-custom-element />
-</MicrofrontendLoader>
+</FrontendLoader>
 ```
 
-`MicrofrontendLoader` calls `remoteUrl(slug)`, which returns the URL the backend resolved, already
+`FrontendLoader` calls `remoteUrl(slug)`, which returns the URL the backend resolved, already
 pinned to a version, and injects it as a script. The SDK also exposes `manifest()`,
 `globalVariables()` and `identities()`, all used in this template.
 
@@ -136,9 +136,9 @@ docker run -p 8080:80 my-host
 
 ## Notes
 
-- There is no Module Federation here, and no `remoteEntry.js`. A web component microfrontend is a plain script that registers a custom element, so the host only needs the URL the orchestrator resolved. `MicrofrontendLoader` asks `remoteUrl(slug)` for it, injects a `<script>`, and renders the element once it has loaded.
-- Builds that externalise React expect `window.React`, `window.ReactDOM` (`react-dom` together with `react-dom/client`, where React 19 keeps `createRoot`) and `window.ReactJSXRuntime`. `MicrofrontendLoader` sets all three before injecting the script; turn that off with `exposeReactGlobals={false}` if your microfrontend bundles its own copy.
-- Pass `scriptType="module"` when the microfrontend uploads its ES build. Leave it unset for the UMD build, which loads as a classic script.
+- There is no Module Federation here, and no `remoteEntry.js`. A web component frontend is a plain script that registers a custom element, so the host only needs the URL the orchestrator resolved. `FrontendLoader` asks `remoteUrl(slug)` for it, injects a `<script>`, and renders the element once it has loaded.
+- Builds that externalise React expect `window.React`, `window.ReactDOM` (`react-dom` together with `react-dom/client`, where React 19 keeps `createRoot`) and `window.ReactJSXRuntime`. `FrontendLoader` sets all three before injecting the script; turn that off with `exposeReactGlobals={false}` if your frontend bundles its own copy.
+- Pass `scriptType="module"` when the frontend uploads its ES build. Leave it unset for the UMD build, which loads as a classic script.
 
 ## License
 
