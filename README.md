@@ -37,6 +37,7 @@ pnpm build      # production build into dist/
 │   ├── custom-elements.d.ts                 # JSX types for the custom elements
 │   ├── index.css
 │   ├── main.tsx                             # configure() lives here
+│   ├── telemetry.ts                         # Application Insights, when the environment asks for it
 │   └── vite-env.d.ts
 ├── .env.example
 ├── package.json
@@ -84,6 +85,63 @@ is the difference between "no environment" and "an environment whose name is the
 `MicrofrontendLoader` calls `remoteUrl(slug)`, which returns the URL the backend resolved, already
 pinned to a version, and injects it as a script. The SDK also exposes `manifest()`,
 `globalVariables()` and `identities()`, all used in this template.
+
+## Application Insights
+
+The host starts [Application Insights](https://learn.microsoft.com/azure/azure-monitor/app/javascript-sdk)
+when its environment has a **global variable** named `APPLICATIONINSIGHTS_CONNECTION_STRING`. Set it
+in the console, on each environment you want monitored, to the connection string of that
+environment's Application Insights resource. The connection string only allows ingestion, so it is
+fine in a browser.
+
+Without the variable nothing happens: `src/telemetry.ts` loads `@microsoft/applicationinsights-web`
+with a dynamic `import()`, so the SDK is a chunk of its own that is never downloaded, and the page
+behaves exactly as before.
+
+With it, the host initialises the SDK once and tracks:
+
+- page views, the first one and every route change (`enableAutoRouteTracking`);
+- unhandled exceptions, of the host and of every remote;
+- `fetch` and XHR calls as dependencies, with W3C (`traceparent`, `tracestate`) and classic
+  (`Request-Id`, `Request-Context`) correlation headers, so a backend that reports to Application
+  Insights joins the same end-to-end transaction;
+- browser timings (page load, network, DOM processing).
+
+Everything is reported under the cloud role name `ROLE_NAME` (`webcomponent-host-react`): rename it in
+`src/telemetry.ts` after your host, so it is told apart from the backends in the application map.
+
+**Correlation with backends.** Correlation headers go to same-origin calls only, by default. To
+correlate the calls to a backend on another host, add that host to `CORRELATED_HOSTS` in
+`src/telemetry.ts` (`'api.example.com'`, or `'*.example.com'`), and make sure the backend's CORS
+allows the request headers `traceparent`, `tracestate`, `Request-Id` and `Request-Context`:
+otherwise the browser preflight fails and the call with it.
+
+**Remotes.** The instance is published on `window.appInsights` once loaded, and remotes use that one
+instead of bundling their own SDK. Exceptions, calls and page views of a remote are already
+tracked; for custom telemetry:
+
+```ts
+window.appInsights?.trackEvent({ name: 'checkout-completed' }, { items: 3 })
+window.appInsights?.trackException({ exception: error })
+```
+
+Web component microfrontends are plain scripts evaluated in this same page, so `window.appInsights`
+is the host's instance for them too.
+
+The optional chaining matters: `window.appInsights` is not there when the environment has no
+connection string, nor before the SDK has finished loading, and a call made then is simply skipped.
+In a TypeScript remote, declare the slice it uses, so it needs no dependency on the SDK:
+
+```ts
+declare global {
+  interface Window {
+    appInsights?: {
+      trackEvent(event: { name: string }, properties?: Record<string, unknown>): void
+      trackException(exception: { exception: Error }, properties?: Record<string, unknown>): void
+    }
+  }
+}
+```
 
 ## Environment variables
 
